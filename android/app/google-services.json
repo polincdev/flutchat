@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "593146763977",
+    "project_id": "flutterchat-23bb3",
+    "storage_bucket": "flutterchat-23bb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593146763977:android:21ff3e106730fd19410b18",
+        "android_client_info": {
+          "package_name": "com.polinc.flutchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593146763977-rff57iar8nbq9obm3dg7fik93h2dof2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgEQrb6fKusiyy7xyRnzw3HcXdf9qk0rA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593146763977-rff57iar8nbq9obm3dg7fik93h2dof2m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "593146763977-hatasholri9se8jur0n67tt5go1tqpj3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.polinc.flutchat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
