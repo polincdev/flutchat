@@ -9,6 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import '/constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import '/RoomPage.dart';
+import '/ConfigPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -140,8 +142,6 @@ class _LoginScreenState extends State<LoginScreen>{
   @override
   Widget build(BuildContext context) {
 
-
-
     _emailController.text = '';
     _passwordController.text ="";
 
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen>{
                   height:double.infinity,
                   child:SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(),
-                      padding:EdgeInsets.symmetric(horizontal: 40.0,vertical: 120.0),
+                      padding:EdgeInsets.symmetric(horizontal: 40.0,vertical: 80.0),
                       child:Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:<Widget>[
@@ -180,15 +180,15 @@ class _LoginScreenState extends State<LoginScreen>{
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'OpenSans',
-                              fontSize: 30.0,
+                              fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 10),
+                          _buildLogo() ,
+                          SizedBox(height: 10),
                           _buildEmailTF() ,
-                          SizedBox(
-                            height: 30.0,
-                          ),
+                          SizedBox(height: 10.0,),
                           _buildPasswordTF(),
                           _buildForgotPasswordBtn(),
                           _buildRememberMeCheckbox(),
@@ -240,11 +240,8 @@ class _LoginScreenState extends State<LoginScreen>{
               hintText:'Enter your email',
               hintStyle: kHintTextStyle,
           ),
-
           ),
-
         )
-
       ]
     );
   }
@@ -327,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen>{
 
   Widget _buildLoginBtn( ){
     return Container(
-padding: EdgeInsets.symmetric(vertical:25.0),
+padding: EdgeInsets.symmetric(vertical:15.0),
       width:double.infinity,
       child: RaisedButton(
         elevation: 5.0,
@@ -437,7 +434,30 @@ padding: EdgeInsets.symmetric(vertical:25.0),
       ),
     );
   }
+  Widget _buildLogo(){
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical:30.0),
+      child:  Container(
+      height: 80.0,
+      width: 80.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 2),
+            blurRadius: 6.0,
+          ),
+        ],
+        image: DecorationImage(
+          image:  AssetImage('assets/chat.png'),
+        ),
+      ),
+    ),
 
+    );
+  }
   Widget _buildSignupBtn() {
     TapGestureRecognizer _tapGestureRecognizer=TapGestureRecognizer();
     _tapGestureRecognizer.onTap=() async {
@@ -732,817 +752,3 @@ print("TEST2");
   }
 }
 
-class ConfigPage extends StatelessWidget {
-  final _nameController = TextEditingController();
-  final _bioController = TextEditingController();
-
-  void setDataAndGoToChatPage(String name, String bio,BuildContext context) {
-    User user=  FirebaseAuth.instance.currentUser;
-
-    user.updateProfile(displayName: name);
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ChatPage(),
-        )
-    );
-    FirebaseFirestore
-        .instance
-        .collection("Users")
-        .doc(user.uid)
-        .set(
-        {
-          "bio": bio,
-          "displayName": name,
-          "email": user.email,
-        }
-    );
-
-
-
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Account data")),
-      body: Stack(
-    children: <Widget>[
-    Container(
-      height: double.infinity,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF73AEF5),
-            Color(0xFF61A4F1),
-            Color(0xFF478DE0),
-            Color(0xFF398AE5),
-          ],
-          stops: [0.1, 0.4, 0.7, 0.9],
-        ),
-      ),
-    ),
-
-    Container(
-    height: double.infinity,
-    padding: EdgeInsets.symmetric(
-          horizontal: 40.0,
-          vertical: 20.0,
-        ),
-    child: ListView(
-        children: <Widget>[
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Name',
-                style: kLabelStyle,
-              ),
-              SizedBox(height: 10.0),
-              Container(
-                alignment: Alignment.centerLeft,
-                decoration: kBoxDecorationStyle,
-                height: 60.0,
-                child: TextField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 14.0),
-                    prefixIcon: Icon(
-                      Icons.add_box,
-                      color: Colors.white,
-                    ),
-                    hintText: 'User name',
-                    hintStyle: kHintTextStyle,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-
-            Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-            Text(
-            'Trip [OPTIONAL]',
-            style: kLabelStyle,
-            ),
-            SizedBox(height: 10.0),
-            Container(
-            alignment: Alignment.centerLeft,
-            decoration: kBoxDecorationStyle,
-            height: 60.0,
-            child: TextField(
-              controller: _bioController,
-            keyboardType: TextInputType.name,
-            style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.only(top: 14.0),
-            prefixIcon: Icon(
-            Icons.add_moderator,
-            color: Colors.white,
-            ),
-            hintText: 'Trip',
-            hintStyle: kHintTextStyle,
-            ),
-            ),
-            ),
-            ],
-            ),
-
-             Container(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
-            width: double.infinity,
-            child:  RaisedButton(
-            elevation: 5.0,
-            onPressed:(){
-
-              var name= _nameController.text;
-              if( name==null || name.isEmpty || name.length<3 || name.length>10){
-                ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:   Text("Wrong name")));
-                return;
-              }
-              var trip= _bioController.text;
-              if(trip.length>20){
-                ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:   Text("Wrong trip")));
-                return;
-              }
-
-              setDataAndGoToChatPage(
-                  _nameController.text,
-                  _bioController.text, context
-              );
-            },
-            padding: EdgeInsets.all(15.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Colors.white,
-            child:Text('ENTER', style: TextStyle(
-                color: Color(0xFF527DAA),
-                letterSpacing:1.5,
-                fontSize:18.0,
-                fontWeight:FontWeight.bold,
-                fontFamily:'OpenSans'
-            )),
-
-          ),
-             ),
-        ],
-      ),
-    ),
-        ]
-     )
-    );
-  }
-}
-
-class RoomPage extends StatelessWidget {
-  final _roomController = TextEditingController();
-
-
-  void goToConfigPage(String room,BuildContext context) {
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ConfigPage(),
-        )
-    );
-
-
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text("Enter room name eg. /room/")),
-        body: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
-                  ),
-                ),
-              ),
-
-              Container(
-                height: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40.0,
-                  vertical: 20.0,
-                ),
-                child: ListView(
-                  children: <Widget>[
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Room',
-                          style: kLabelStyle,
-                        ),
-                        SizedBox(height: 10.0),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          decoration: kBoxDecorationStyle,
-                          height: 60.0,
-                          child: TextField(
-                            controller: _roomController,
-                            keyboardType: TextInputType.text,
-                            inputFormatters: [
-                              LowerCaseTextFormatter(),
-                            ],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(top: 14.0),
-                              prefixIcon: Icon(
-                                Icons.add_box,
-                                color: Colors.white,
-                              ),
-                              hintText: '/room/',
-                              hintStyle: kHintTextStyle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 25.0),
-                      width: double.infinity,
-                      child:  RaisedButton(
-                        elevation: 5.0,
-                        onPressed:(){
-
-                         var roomName= _roomController.text;
-                          if( roomName==null ||  roomName.isEmpty ||  roomName.length<3 ||  roomName.length>20){
-                             ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:   Text("Empty room name")));
-                             return;
-                           }
-                          if(!roomName.startsWith("/") && !roomName.endsWith("/") ){
-                            ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:   Text("Room name should start and end with '/'")));
-                            return;
-                          }
-
-                          MyChatApp.roomName= _roomController.text.toLowerCase();
-
-                          goToConfigPage(
-                              _roomController.text,
-                               context
-                          );
-                        },
-                        padding: EdgeInsets.all(15.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        color: Colors.white,
-                        child:Text('ENTER', style: TextStyle(
-                            color: Color(0xFF527DAA),
-                            letterSpacing:1.5,
-                            fontSize:18.0,
-                            fontWeight:FontWeight.bold,
-                            fontFamily:'OpenSans'
-                        )),
-
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]
-        )
-    );
-  }
-}
-
-class LowerCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    return TextEditingValue(
-      text: newValue.text.toLowerCase(),
-      selection: newValue.selection,
-    );
-  }
-}
-
-class ChatPage extends StatefulWidget {
-
-  @override
-  State<ChatPage> createState() => ChatPageState();
-}
-
-class ChatPageState extends State<ChatPage> {
-  var _messageController =TextEditingController();
-
-  void sendText(String text) {
-    User user = FirebaseAuth.instance.currentUser;
-
-     try {
-      FirebaseFirestore.instance.collection("Messages").add(
-          {
-            "from": user.uid,
-            "when": Timestamp.fromDate(DateTime.now().toUtc()),
-            "msg": text,
-            "room":MyChatApp.roomName,
-
-          }
-      );
-    }
-    catch(e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(e.toString())
-        ),
-      );
-     // print("blad="+e.toString());
-    }
-  }
-
-  Stream<QuerySnapshot> getMessages() =>
-      FirebaseFirestore.instance
-          .collection("Messages")
-          .where('room', isEqualTo: MyChatApp.roomName)
-          //  .where('room', isEqualTo: "/Polska/", )
-           .where('when',  isGreaterThanOrEqualTo: new DateTime.now().subtract(Duration( hours: 1  ))  )
-          .orderBy("when", descending: true)
-           .snapshots();
-
-  _goBack(BuildContext context) {
-    Navigator.pop(context);
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      appBar: AppBar(
-        title: Text(MyChatApp.roomName),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          iconSize: 20.0,
-          onPressed: () {
-          _goBack(context);
-          },
-          ),
-        actions: [
-          IconButton(
-            tooltip: "Change your bio",
-            icon: Icon(Icons.edit),
-            onPressed: () =>
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ChangeBioPage()
-                    )
-                ),
-          )
-        ],
-    ),
-
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: StreamBuilder(
-                stream: getMessages(),
-                builder: (context, snapshot) {
-
-                  print("RET="+ snapshot.hasData.toString());
-
-                  return Stack(
-                      children: <Widget>[
-                        Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xFF73AEF5),
-                                Color(0xFF61A4F1),
-                                Color(0xFF478DE0),
-                                Color(0xFF398AE5),
-                              ],
-                              stops: [0.1, 0.4, 0.7, 0.9],
-                            ),
-                          ),
-                        ),
-
-                        snapshot.hasData ?
-                        MessagesList(snapshot.data as QuerySnapshot)
-                            :
-                        Center(child: CircularProgressIndicator())
-                      ]
-                  );
-                },
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                      controller: _messageController,
-                      keyboardType: TextInputType.text,
-                      onSubmitted: (txt) {
-
-                        if( txt==null || txt.isEmpty ||  txt.length>50){
-                          ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:   Text("Wrong post")));
-                          return;
-                        }
-
-                        sendText(txt);
-                        _messageController.clear();
-                      }
-                  ),
-                ),
-              ),
-              IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    sendText(_messageController.text);
-                    _messageController.clear();
-                  }
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-
-class MessagesList extends StatelessWidget {
-  MessagesList(this.data);
-
-  final QuerySnapshot data;
-
-  bool areSameDay(Timestamp a, Timestamp b) {
-    var date1 = a.toDate().toLocal();
-    var date2 = b.toDate().toLocal();
-    return
-      (date1.year == date2.year)
-          &&
-          (date1.month == date2.month)
-          &&
-          (date1.day == date2.day);
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      ListView.builder(
-          reverse: true,
-          itemCount: data.docs.length,
-          itemBuilder: (context, i) {
-            var months = [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ];
-
-            DateTime when = data
-                .docs[i].get("when")
-                .toDate()
-                .toLocal();
-
-            CollectionReference users = FirebaseFirestore.instance.collection('Users');
-
-           print("PRINT="+when.toString()+" "+data.docs[i].get("from").toString()+" "+users.doc(data.docs[i].get("from")).get().toString());
-
-            var widgetsToShow = <Widget>[
-              FutureBuilder<DocumentSnapshot>(
-              future: users.doc(data.docs[i].get("from")).get(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if( snapshot.hasData) {
-                print("PRINT2a="+snapshot.hasData.toString());
-
-                 print("PRINT2="+(snapshot.data as DocumentSnapshot).data().toString());
-
-                 var mess = Message(
-                    from: (snapshot.data as DocumentSnapshot).data(),
-                    msg: data.docs[i].get("msg"),
-                    when: when,
-                    uid: data.docs[i].get("from")
-                );
-                 print("PRINT3="+mess.from["displayName"]);
-
-                 return mess;
-              }
-             else {
-                return CircularProgressIndicator();
-              }
-
-              },
-            ),
-            ];
-
-            if(i == data.docs.length-1) {
-              widgetsToShow.insert(
-                  0,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Text(
-                      "${when.day} ${months[when.month-1]} ${when.year}",
-                      style: Theme.of(context).textTheme.subhead,
-                    ),
-                  )
-              );
-            } else if(
-            !areSameDay(
-                data.docs[i+1].get("when"),
-                data.docs[i].get("when")
-            )
-            ) {
-              widgetsToShow.insert(
-                  0,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Text(
-                        "${when.day} ${months[when.month-1]} ${when.year}",
-                        style: Theme.of(context).textTheme.subhead
-                    ),
-                  )
-              );
-            }
-            return Column(
-                children: widgetsToShow
-            );
-          }
-      );
-}
-
-class Message extends StatelessWidget {
-  Message({this.from, this.msg, this.when, this.uid});
-
-  final Map<String, dynamic> from;
-  final String uid;
-  final String msg;
-  final DateTime when;
-
-  @override
-  Widget build(BuildContext context) {
-    User user = FirebaseAuth.instance.currentUser;
-
-    return Container(
-        alignment: user.uid == uid
-            ? Alignment.centerRight
-            : Alignment.centerLeft,
-        child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width / 3 * 2,
-          child: Card(
-              shape: StadiumBorder(),
-              child: ListTile(
-                title: user.uid != uid
-                    ?
-                InkWell(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 8.0,
-                        left: 5.0
-                    ),
-                    child: Text(
-                        from["displayName"],
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .subtitle
-                    ),
-                  ),
-                  /* onTap: () =>
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage(from)
-                          )
-                      ),*/
-                )
-                    :
-                InkWell(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: Text(
-                        "You",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .subtitle
-                    ),
-                  ),
-                  onTap: () =>
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage(from)
-                          )
-                      ),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 10.0,
-                      left: 5.0
-                  ),
-                  child: Text(
-                      msg,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .body1
-                  ),
-                ),
-                trailing: Text("${when.hour}:${when.minute}"),
-              )
-          ),
-        )
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  ProfilePage(this.user);
-
-  final Map<String, dynamic> user;
-
-  @override
-  Widget build(context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Profile"),
-        ),
-        body: Center(
-          child:
-          Stack(
-            children: <Widget>[
-          Container(
-          height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF73AEF5),
-                  Color(0xFF61A4F1),
-                  Color(0xFF478DE0),
-                  Color(0xFF398AE5),
-                ],
-                stops: [0.1, 0.4, 0.7, 0.9],
-              ),
-            ),
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text(
-                  user["displayName"],
-                  style: Theme.of(context).textTheme.title
-              ),
-              Text(
-                  user["bio"],
-                  style: Theme.of(context).textTheme.subtitle
-              ),
-              FlatButton.icon(
-                  icon: Icon(Icons.email),
-                  label: Text("Send an e-mail to ${user["displayName"]}"),
-                  onPressed: () async {
-                    var url =
-                        "mailto:${user["email"]}?body=${user["displayName"]},\n";
-                    if(await canLaunch(url)) {
-                      launch(url);
-                    } else {
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("You don't have any e-mail app"),
-                          )
-                      );
-                    }
-                  }
-              )
-            ],
-          ),
-          ]
-          ),
-        )
-    );
-  }
-}
-
-class ChangeBioPage extends StatelessWidget {
-  final _controller = TextEditingController();
-
-  void _changeBio(String bio)
-      {
-      User user = FirebaseAuth.instance.currentUser;
-
-                FirebaseFirestore
-                .instance
-                .collection("Users")
-                .doc(user.uid)
-                .update(
-                {
-                  "bio": bio
-                });
-          }
-
-
-  @override
-  Widget build(context) =>
-      Scaffold(
-          appBar: AppBar(
-            title: Text("Change your trip"),
-          ),
-          body: Center(
-            child:
-            Stack(
-              children: <Widget>[
-            Container(
-            height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF73AEF5),
-                    Color(0xFF61A4F1),
-                    Color(0xFF478DE0),
-                    Color(0xFF398AE5),
-                  ],
-                  stops: [0.1, 0.4, 0.7, 0.9],
-                ),
-              ),
-            ),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                      controller: _controller,
-
-                      decoration: InputDecoration(
-                          labelText: "Trip"
-                      ),
-                      onSubmitted: (bio) {
-                        _changeBio(bio);
-                        Navigator.pop(context);
-                      }
-                  ),
-                ),
-                FlatButton(
-                    child: Text("Change Bio"),
-                    onPressed: () {
-                      _changeBio(_controller.text);
-                      Navigator.pop(context);
-                    }
-                )
-              ],
-            ),
-            ]
-            ),
-          )
-      );
-}
